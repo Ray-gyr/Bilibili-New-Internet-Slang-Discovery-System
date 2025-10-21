@@ -46,7 +46,10 @@ The model was trained in two iterative phases, both validated using 5-fold cross
 | Phase 2 | 1,205  | 0.851   | 0.72   | 0.70     |
 ---
 ### Phase 1 — Foundation Model (5-Fold Cross Validation)
+- Training data consists of **555 obviously true / obviously false words** to establish a reliable baseline
+
 **Performance Metrics (5-Fold Cross Validation**):
+
 Accuracy: 0.9550
 Classification Report:
 ```
@@ -63,7 +66,11 @@ Confusion Matrix:
 [ 1 21]]
 ```
 ### Phase 2 — Enhanced Model (Extended Dataset)
+- Phase 2 expands training data by using the **Phase 1 model to identify borderline candidates** with confidence around 0.5.  
+- These uncertain words were **manually labeled** to enlarge the dataset to **1,205 samples**, improving generalization.
+
 **Performance Metrics (5-Fold Cross Validation)**:
+
 Accuracy: 0.8506
 Classification Report:
    ```
@@ -95,11 +102,11 @@ Confusion Matrix:
 
 The threshold of 0.27 represents a tradeoff between F1-score and Recall. Since the system prioritizes catching all potential slang words, higher recall is crucial, while maintaining a reasonable F1-score.
 
-![F1-score and Recall vs Classification Threshold](images/xgb_metrics_vs_threshold_v2.png)
+![F1-score and Recall vs Classification Threshold](image/xgb_metrics_vs_threshold_v2.png)
 
 📊 Model Feature Importance
 
-![Weight of each feature in the XGBoost model](images/XGBoost_Feature_Importance_v2.png)
+![Weight of each feature in the XGBoost model](image/XGBoost_Feature_Importance_v2.png)
 
 ## 🌐 Web Interface Overview
 **Running the Website Locally**
