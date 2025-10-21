@@ -80,7 +80,7 @@ Classification Report:
 	          1       0.45      0.53      0.49        32
 	   accuracy                           0.85       241
 	  macro avg       0.69      0.72      0.70       241
-weighted avg          0.86      0.85      0.86       241
+weighted avg       0.86      0.85      0.86       241
 
 Confusion Matrix:
 [[188  21]
@@ -132,7 +132,7 @@ flask run
 - Progress Tracking: Tracks daily & total annotations
 
 **Administrator Review Panel**
-- Login: Default account → admin / Asdf1234
+- Login: Default account → **admin / Asdf1234**
 
 - Review Queue: View terms with enough annotations
 
