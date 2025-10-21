@@ -102,11 +102,13 @@ Confusion Matrix:
 
 The threshold of 0.27 represents a tradeoff between F1-score and Recall. Since the system prioritizes catching all potential slang words, higher recall is crucial, while maintaining a reasonable F1-score.
 
-![F1-score and Recall vs Classification Threshold](image/xgb_metrics_vs_threshold_v2.png)
+<img src="image/xgb_metrics_vs_threshold_v2.png" alt="F1-score and Recall vs Classification Threshold" width="600" height="400">
+
 
 📊 Model Feature Importance
 
-![Weight of each feature in the XGBoost model](image/XGBoost_Feature_Importance_v2.png)
+<img src="image/XGBoost_Feature_Importance_v2.png" alt="Weight of each feature in the XGBoost model" width="600" height="400">
+
 
 ## 🌐 Web Interface Overview
 **Running the Website Locally**
