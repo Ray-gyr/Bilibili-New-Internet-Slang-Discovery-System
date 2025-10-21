@@ -17,8 +17,8 @@ A comprehensive system for collecting, analyzing, and discovering new words from
 ## Installation Steps
 ### 1. Clone the repository
 ```
-git clone <https://github.com/Ray-gyr/Bilibili-New-Internet-Slang-Discovery-System.git>
-cd bilibili-new-word-discovery
+git clone https://github.com/Ray-gyr/Bilibili-New-Internet-Slang-Discovery-System.git
+cd Bilibili-New-Internet-Slang-Discovery-System
 ```
 ### 2. Create and activate virtual environment
 ```
@@ -32,7 +32,6 @@ pip install -r requirements.txt
 ### 4. Install Playwright browser
 ```
 playwright install chromium
-Initialize Database
 ```
 ## 🎯 Project Overview
 This system automatically discovers emerging Chinese internet slang through a complete pipeline:
