@@ -34,7 +34,46 @@ pip install -r requirements.txt
 playwright install chromium
 Initialize Database
 ```
+## 🎯 Project Overview
+This system automatically discovers emerging Chinese internet slang through a complete pipeline:
 
+- Intelligent Data Collection - Multi-category balanced sampling from Bilibili
+
+- Machine Learning Filtering - XGBoost model identifies potential slang
+
+- Human-in-the-Loop Validation - Web-based collaborative annotation platform
+
+- Quality Control - Administrator review and approval workflow
+
+## 🕷️ Advanced Web Crawling System
+Intelligent Multi-Category Crawler
+Our crawler implements sophisticated strategies for comprehensive data collection from Bilibili:
+
+### 1. Balanced Category Sampling
+Proportional sampling across multiple content categories
+```
+CATEGORY_RATIOS = {
+    'kichiku': 0.45,    # Kichiku/鬼畜区 - Memes and parody content
+    'music': 0.10,      # Music/音乐区 - Music and performances  
+    'game': 0.10,       # Gaming/游戏区 - Game streaming and reviews
+    'life': 0.10,       # Lifestyle/生活区 - Daily life and vlogs
+    'knowledge': 0.10,  # Knowledge/知识区 - Educational content
+    'film': 0.10,       # Film/影视区 - Movies and TV shows
+    'other': 0.05       # Other categories
+}
+```
+### 2. Dynamic Sampling Strategy
+The crawler automatically adjusts category sampling based on current database distribution to maintain linguistic diversity and prevent bias toward any single content type.
+
+### 3. Anti-Detection Features
+- WBI Signature Verification - Implements Bilibili's latest anti-crawler signature system
+
+- Real Browser Automation - Uses Playwright with human-like interaction patterns
+
+- Request Throttling - Intelligent delays between requests to avoid rate limiting
+
+- Session Management - Maintains persistent login sessions with cookie refresh
+  
 ## 🧠Model Training Summary
 
 The model was trained in two iterative phases, both validated using 5-fold cross-validation. Hyperparameter optimization was conducted via Optuna for the XGBoost model.
