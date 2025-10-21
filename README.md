@@ -73,7 +73,7 @@ The crawler automatically adjusts category sampling based on current database di
 
 - Session Management - Maintains persistent login sessions with cookie refresh
   
-## 🧠Model Training Summary
+## 🧠Model Training
 Existing Chinese word segmentation tools such as Jieba and pkuseg still struggle to accurately identify emerging Internet slang.
 Therefore, this system is built from scratch to intelligently detect and evaluate newly coined expressions in online discourse.
 ### Feature Selection Strategy
@@ -93,7 +93,7 @@ Our feature engineering combines linguistic theory and statistical analysis to i
 
 - Hot Video Ratio - Tracks viral propagation in trending content
 ---
-### Training
+### Training Summary
 
 The model was trained in two iterative phases, both validated using 5-fold cross-validation. Hyperparameter optimization was conducted via Optuna for the XGBoost model.
 
@@ -124,6 +124,8 @@ Confusion Matrix:
 [ 1 21]]
 ```
 Due to the small size of the dataset, the words are easy to learn, so an accuracy of 0.9550 does not necessarily indicate that the model has sufficient generalization ability.
+
+---
 ### Phase 2 — Enhanced Model (Extended Dataset)
 - Phase 2 expands training data by using the **Phase 1 model to identify borderline candidates** with confidence around 0.5.  
 - These uncertain words were **manually labeled** to enlarge the dataset to **1,205 samples**, improving generalization.
@@ -166,9 +168,15 @@ The threshold of 0.27 represents a tradeoff between F1-score and Recall. Since t
 <img src="image/xgb_metrics_vs_threshold_v2.png" alt="F1-score and Recall vs Classification Threshold" width="600" height="400">
 
 
-📊 Model Feature Importance
+**Model Feature Importance**
 
 <img src="image/XGBoost_Feature_Importance_v2.png" alt="Weight of each feature in the XGBoost model" width="600" height="400">
+
+Feature importance analysis reveals that PMI and word length contribute most to distinguishing creative slang formation from ordinary collocations.
+The remaining features each have weights around 0.1, suggesting that the feature selection is generally balanced and effective, with no severe redundancy or overfitting.
+
+---
+### Limitations & Future Work
 
 Despite improvements in generalization, the dataset size and manual labeling scope **remain limited**.
 Future iterations could integrate semantic embeddings (e.g., from Chinese BERT or ERNIE) and temporal features to capture evolving slang more effectively.
