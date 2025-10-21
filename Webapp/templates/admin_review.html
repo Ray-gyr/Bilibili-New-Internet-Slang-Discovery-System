@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Review - SlangDiscover</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #354f52;
+            --secondary: #52796f;
+            --accent: #84a98c;
+            --light: #cad2c5;
+            --dark: #2f3e46;
+        }
+        
+        .admin-container {
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .filters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .filter-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .filter-item label {
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        
+        input, select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: var(--secondary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary);
+        }
+        
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #218838;
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #c82333;
+        }
+        
+        .btn-sm {
+            padding: 5px 10px;
+            font-size: 0.875rem;
+        }
+        
+        .batch-actions {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .words-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .words-table th, .words-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .words-table th {
+            background: #f8f9fa;
+            font-weight: bold;
+            position: sticky;
+            top: 0;
+        }
+        
+        .words-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .word-status {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .status-approved {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-rejected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .vote-count {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .vote-yes {
+            color: #28a745;
+        }
+        
+        .vote-no {
+            color: #dc3545;
+        }
+        
+        /* Improved pagination styles */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            gap: 5px;
+        }
+        
+        .pagination a, .pagination span {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-decoration: none;
+            color: var(--primary);
+        }
+        
+        .pagination a:hover {
+            background: #f8f9fa;
+        }
+        
+        .pagination .current {
+            background: var(--secondary);
+            color: white;
+            border-color: var(--secondary);
+        }
+        
+        .pagination .ellipsis {
+            padding: 8px 5px;
+            border: none;
+        }
+        
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+        
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close:hover {
+            color: black;
+        }
+        
+        .word-detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .word-detail-title {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin: 0;
+        }
+        
+        .word-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .metric-card {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        .metric-label {
+            font-size: 0.875rem;
+            color: #6c757d;
+            margin-bottom: 5px;
+        }
+        
+        .metric-value {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .sentences-container {
+            margin: 20px 0;
+        }
+        
+        .sentence-item {
+            background: #f8f9fa;
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .votes-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .votes-table th, .votes-table td {
+            padding: 10px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .votes-table th {
+            background: #f8f9fa;
+            font-weight: bold;
+        }
+        
+        .label-yes {
+            color: #28a745;
+            font-weight: bold;
+        }
+        
+        .label-no {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        
+        .select-all-checkbox {
+            margin-right: 5px;
+        }
+        
+        /* Additional styles */
+        .additional-stats {
+            margin: 20px 0;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        
+        .stat-item {
+            background: #f8f9fa;
+            padding: 10px 15px;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .stat-label {
+            font-weight: bold;
+            color: #6c757d;
+        }
+        
+        .stat-value {
+            color: var(--primary);
+            font-family: monospace;
+        }
+        
+        mark {
+            background-color: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        
+        /* Table column width adjustments for better English display */
+        .col-checkbox { width: 30px; }
+        .col-id { width: 60px; }
+        .col-word { width: 150px; }
+        .col-status { width: 100px; }
+        .col-votes { width: 180px; }
+        .col-machine { width: 120px; }
+        .col-human { width: 120px; }
+        .col-actions { width: 200px; }
+        
+        @media (max-width: 768px) {
+            .filters {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .words-table {
+                font-size: 0.875rem;
+            }
+            
+            .words-table th, .words-table td {
+                padding: 8px 10px;
+            }
+            
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+            }
+            
+            /* Responsive column adjustments */
+            .col-checkbox, .col-id, .col-status, 
+            .col-machine, .col-human {
+                display: none;
+            }
+            
+            .col-word { width: auto; }
+            .col-votes { width: auto; }
+            .col-actions { width: auto; }
+        }
+    </style>
+</head>
+<body>
+    {% extends "layout.html" %}
+    
+    {% block title %}Admin Review - SlangDiscover{% endblock %}
+    
+    {% block content %}
+    <div class="admin-container">
+        <div class="page-header">
+            <h1><i class="fas fa-clipboard-check"></i> Word Review</h1>
+        </div>
+        
+        <!-- Filter form -->
+        <form method="GET" class="filters">
+            <div class="filter-item">
+                <label for="search">Search:</label>
+                <input type="text" id="search" name="search" value="{{ search }}" placeholder="Enter keyword...">
+            </div>
+            
+            <div class="filter-item">
+                <label for="status">Status:</label>
+                <select id="status" name="status">
+                    <option value="all" {% if status_filter == 'all' %}selected{% endif %}>All Status</option>
+                    <option value="pending" {% if status_filter == 'pending' %}selected{% endif %}>Pending</option>
+                    <option value="approved" {% if status_filter == 'approved' %}selected{% endif %}>Approved</option>
+                    <option value="rejected" {% if status_filter == 'rejected' %}selected{% endif %}>Rejected</option>
+                </select>
+            </div>
+            
+            <div class="filter-item">
+                <label for="min_votes">Min Votes:</label>
+                <input type="number" id="min_votes" name="min_votes" value="{{ min_votes }}" min="0" max="20">
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Apply Filters</button>
+        </form>
+        
+        <!-- Batch actions -->
+        <div class="batch-actions">
+            <input type="checkbox" id="select-all" class="select-all-checkbox">
+            <label for="select-all">Select All</label>
+            
+            <button class="btn btn-success" onclick="batchUpdate('approve')">
+                <i class="fas fa-check"></i> Batch Approve
+            </button>
+            <button class="btn btn-danger" onclick="batchUpdate('reject')">
+                <i class="fas fa-times"></i> Batch Reject
+            </button>
+            <span id="selected-count">0 words selected</span>
+        </div>
+        
+        <!-- Words table -->
+        <table class="words-table">
+            <thead>
+                <tr>
+                    <th class="col-checkbox"><input type="checkbox" id="select-all-header"></th>
+                    <th class="col-id">ID</th>
+                    <th class="col-word">Word</th>
+                    <th class="col-status">Status</th>
+                    <th class="col-votes">Votes</th>
+                    <th class="col-machine">Machine Score</th>
+                    <th class="col-human">Human Score</th>
+                    <th class="col-actions">Actions</th>
+                </tr>
+            </thead>
+            <tbody> 
+                {% for word in words %}
+                <tr>
+                    <td class="col-checkbox"><input type="checkbox" class="word-checkbox" data-id="{{ word.id }}"></td>
+                    <td class="col-id">{{ word.id }}</td>
+                    <td class="col-word">{{ word.word }}</td>
+                    <td class="col-status">
+                        <span class="word-status status-{{ word.status }}">
+                            {% if word.status == 'pending' %}Pending
+                            {% elif word.status == 'approved' %}Approved
+                            {% elif word.status == 'rejected' %}Rejected
+                            {% else %}{{ word.status }}{% endif %}
+                        </span>
+                    </td>
+                    <td class="col-votes">
+                        <div class="vote-count">
+                            <span class="vote-yes"><i class="fas fa-thumbs-up"></i> {{ word.yes_votes or 0 }}</span>
+                            /
+                            <span class="vote-no"><i class="fas fa-thumbs-down"></i> {{ word.no_votes or 0 }}</span>
+                            (Total: {{ word.vote_count or 0 }})
+                        </div>
+                    </td>
+                    <td class="col-machine">{{ "%.2f"|format(word.machine_score) if word.machine_score else 'N/A' }}</td>
+                    <td class="col-human">{{ "%.2f"|format(word.human_score) if word.human_score is not none else 'N/A' }}</td>
+                    <td class="col-actions">
+                        <button class="btn btn-sm btn-primary" onclick="showWordDetail({{word.id}})">
+                            <i class="fas fa-eye"></i> Details
+                        </button>
+                        {% if word.status != 'approved' %}
+                        <button class="btn btn-sm btn-success" onclick="updateStatus({{word.id}}, 'approve')">
+                            <i class="fas fa-check"></i> Approve
+                        </button>
+                        {% endif %}
+                        {% if word.status != 'rejected' %}
+                        <button class="btn btn-sm btn-danger" onclick="updateStatus({{word.id}}, 'reject')">
+                            <i class="fas fa-times"></i> Reject
+                        </button>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="8" style="text-align: center; padding: 20px;">
+                        No words found matching the criteria
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <!-- Pagination -->
+        {% if total_pages > 1 %}
+        <div class="pagination">
+            {% if page > 1 %}
+            <a href="{{ url_for('admin_review', page=page-1, search=search, status=status_filter, min_votes=min_votes) }}">&laquo; Previous</a>
+            {% endif %}
+            
+            {% set page_range = 2 %} {# Number of pages to show before and after current page #}
+            {% set start_page = [1, page - page_range]|max %}
+            {% set end_page = [total_pages, page + page_range]|min %}
+            
+            {% if start_page > 1 %}
+            <a href="{{ url_for('admin_review', page=1, search=search, status=status_filter, min_votes=min_votes) }}">1</a>
+            {% if start_page > 2 %}
+            <span class="ellipsis">...</span>
+            {% endif %}
+            {% endif %}
+            
+            {% for p in range(start_page, end_page + 1) %}
+            {% if p == page %}
+            <span class="current">{{ p }}</span>
+            {% else %}
+            <a href="{{ url_for('admin_review', page=p, search=search, status=status_filter, min_votes=min_votes) }}">{{ p }}</a>
+            {% endif %}
+            {% endfor %}
+            
+            {% if end_page < total_pages %}
+            {% if end_page < total_pages - 1 %}
+            <span class="ellipsis">...</span>
+            {% endif %}
+            <a href="{{ url_for('admin_review', page=total_pages, search=search, status=status_filter, min_votes=min_votes) }}">{{ total_pages }}</a>
+            {% endif %}
+            
+            {% if page < total_pages %}
+            <a href="{{ url_for('admin_review', page=page+1, search=search, status=status_filter, min_votes=min_votes) }}">Next &raquo;</a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+    
+    <!-- Word detail modal -->
+    <div id="wordDetailModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div id="wordDetailContent">
+                <!-- Content will be loaded dynamically via JavaScript -->
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+    
+    {% block scripts %}
+    <script>
+        // Global variables
+        let selectedWords = new Set();
+        
+        // Initialize after page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Select/deselect all functionality
+            document.getElementById('select-all-header').addEventListener('change', function() {
+                const checkboxes = document.querySelectorAll('.word-checkbox');
+                checkboxes.forEach(checkbox => {
+                    checkbox.checked = this.checked;
+                    updateSelection(checkbox);
+                });
+            });
+            
+            // Individual checkbox changes
+            const checkboxes = document.querySelectorAll('.word-checkbox');
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    updateSelection(this);
+                });
+            });
+        });
+        
+        // Update selection status
+        function updateSelection(checkbox) {
+            const wordId = parseInt(checkbox.dataset.id);
+            
+            if (checkbox.checked) {
+                selectedWords.add(wordId);
+            } else {
+                selectedWords.delete(wordId);
+            }
+            
+            // Update select-all checkbox status
+            const allChecked = document.querySelectorAll('.word-checkbox:checked').length === 
+                              document.querySelectorAll('.word-checkbox').length;
+            document.getElementById('select-all-header').checked = allChecked;
+            document.getElementById('select-all').checked = allChecked;
+            
+            // Update count display
+            document.getElementById('selected-count').textContent = `${selectedWords.size} words selected`;
+        }
+        
+        // Select all on current page
+        document.getElementById('select-all').addEventListener('change', function() {
+            const checkboxes = document.querySelectorAll('.word-checkbox');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = this.checked;
+                updateSelection(checkbox);
+            });
+        });
+        
+        // Batch update status
+        function batchUpdate(action) {
+            if (selectedWords.size === 0) {
+                alert('Please select words to perform this action');
+                return;
+            }
+            
+            if (!confirm(`Are you sure you want to ${action === 'approve' ? 'approve' : 'reject'} ${selectedWords.size} words?`)) {
+                return;
+            }
+            
+            fetch('/admin/batch_update', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    word_ids: Array.from(selectedWords),
+                    action: action
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Operation completed successfully');
+                    location.reload();
+                } else {
+                    alert('Operation failed: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Operation failed');
+            });
+        }
+        
+        // Single status update
+        function updateStatus(wordId, action) {
+            if (!confirm(`Are you sure you want to ${action === 'approve' ? 'approve' : 'reject'} this word?`)) {
+                return;
+            }
+            
+            fetch('/admin/batch_update', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    word_ids: [wordId],
+                    action: action
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Operation completed successfully');
+                    location.reload();
+                } else {
+                    alert('Operation failed: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Operation failed');
+            });
+        }
+        
+        // Show word details
+        function showWordDetail(wordId) {
+            // Add validation to ensure wordId is valid
+            if (!wordId || wordId === "undefined") {
+                console.error("Invalid word ID:", wordId);
+                alert("Cannot get word details: Invalid word ID");
+                return;
+            }
+            
+            fetch(`/admin/word/${wordId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.error) {
+                        alert(data.error);
+                        return;
+                    }
+                    
+                    const word = data.word;
+                    const labels = data.labels;
+                    
+                    // Build detail HTML
+                    let html = `
+                        <div class="word-detail-header">
+                            <h2 class="word-detail-title">${word.word || 'No word text'}</h2>
+                            <span class="word-status status-${word.status || 'pending'}">
+                                ${word.status === 'pending' ? 'Pending' : 
+                                  word.status === 'approved' ? 'Approved' : 
+                                  word.status === 'rejected' ? 'Rejected' : (word.status || 'Unknown')}
+                            </span>
+                        </div>
+                        
+                        <div class="word-metrics">
+                            <div class="metric-card">
+                                <div class="metric-label">Machine Score</div>
+                                <div class="metric-value">${word.machine_score != null ? word.machine_score.toFixed(2) : 'N/A'}</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-label">Human Score</div>
+                                <div class="metric-value">${word.human_score != null ? word.human_score.toFixed(2) : 'N/A'}</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-label">TF-IDF</div>
+                                <div class="metric-value">${word.tfidf ? word.tfidf.toFixed(4) : 'N/A'}</div>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-label">PMI</div>
+                                <div class="metric-value">${word.pmi ? word.pmi.toFixed(4) : 'N/A'}</div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    // Add example sentences - using labeling.html approach
+                    if (word.sentences && word.sentences.length > 0) {
+                        html += `
+                            <div class="sentences-container">
+                                <h3>Example Sentences</h3>
+                                ${word.sentences.map(s => {
+                                    // Handle sentence format, could be string or array
+                                    let sentenceText, startIdx, endIdx;
+                                    
+                                    if (Array.isArray(s)) {
+                                        // Format: [sentence, start_index, end_index]
+                                        sentenceText = s[0];
+                                        startIdx = s[1];
+                                        endIdx = s[2];
+                                        
+                                        // Highlight the word part
+                                        const highlighted = sentenceText.slice(0, startIdx) + 
+                                                          '<mark>' + sentenceText.slice(startIdx, endIdx) + '</mark>' + 
+                                                          sentenceText.slice(endIdx);
+                                        
+                                        return `<div class="sentence-item">${highlighted}</div>`;
+                                    } else {
+                                        // Format: simple string
+                                        return `<div class="sentence-item">${s}</div>`;
+                                    }
+                                }).join('')}
+                            </div>
+                        `;
+                    } else {
+                        html += `<p>No example sentences available</p>`;
+                    }
+                    
+                    // Add other statistical information - using labeling.html approach
+                    html += `
+                        <div class="additional-stats">
+                            <h3>Additional Statistics</h3>
+                            <div class="stats-grid">
+                                <div class="stat-item">
+                                    <span class="stat-label">log_freq:</span>
+                                    <span class="stat-value">${word.log_freq || 'N/A'}</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">leftent:</span>
+                                    <span class="stat-value">${word.leftent || 'N/A'}</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">rightent:</span>
+                                    <span class="stat-value">${word.rightent || 'N/A'}</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">hot_video_ratio:</span>
+                                    <span class="stat-value">${word.hot_video_ratio || 'N/A'}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    // Add voting details
+                    if (labels && labels.length > 0) {
+                        html += `
+                            <h3>Voting Details (${labels.length} votes)</h3>
+                            <table class="votes-table">
+                                <thead>
+                                    <tr>
+                                        <th>User</th>
+                                        <th>Vote</th>
+                                        <th>Time</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${labels.map(label => `
+                                        <tr>
+                                            <td>${label.username || 'Unknown user'}</td>
+                                            <td class="${label.label ? 'label-yes' : 'label-no'}">
+                                                ${label.label ? 'Is Slang' : 'Not Slang'}
+                                            </td>
+                                            <td>${new Date(label.timestamp).toLocaleString()}</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        `;
+                    } else {
+                        html += `<p>No voting data available</p>`;
+                    }
+                    
+                    document.getElementById('wordDetailContent').innerHTML = html;
+                    document.getElementById('wordDetailModal').style.display = 'block';
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to get word details: ' + error.message);
+                });
+        }
+        
+        // Close modal
+        function closeModal() {
+            document.getElementById('wordDetailModal').style.display = 'none';
+        }
+        
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('wordDetailModal');
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+    </script>
+    {% endblock %}
+</body>
+</html>

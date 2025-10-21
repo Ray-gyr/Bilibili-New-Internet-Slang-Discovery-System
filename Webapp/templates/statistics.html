@@ -1,0 +1,108 @@
+{% extends "layout.html" %}
+{% block title %}Statistics{% endblock %}
+{% block content %}
+<h1>Labeling Statistics</h1>
+
+{% if not is_logged_in %}
+<div class="login-prompt">
+    <p>Please <a href="{{ url_for('login_page', next=request.path) }}">log in</a> to view your personal statistics.</p>
+</div>
+{% endif %} 
+
+<div class="stats-container">
+    {% if is_logged_in %}
+    <div class="stats-card">
+        <h3>Your Statistics</h3>
+        <div class="stat-item">
+            <span class="stat-label">Total Labels:</span>
+            <span class="stat-value">{{ user_stats.total_labels }}</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">Positive Labels:</span>
+            <span class="stat-value">{{ user_stats.positive_labels }}</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">Negative Labels:</span>
+            <span class="stat-value">{{ user_stats.negative_labels }}</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">Positive Ratio:</span>
+            <span class="stat-value">{{ "%.2f"|format(user_stats.positive_ratio * 100) }}%</span>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="stats-card">
+        <h3>Global Statistics</h3>
+        <div class="stat-item">
+            <span class="stat-label">Total Labels:</span>
+            <span class="stat-value">{{ global_stats.total_labels }}</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">Positive Labels:</span>
+            <span class="stat-value">{{ global_stats.positive_labels }}</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">Negative Labels:</span>
+            <span class="stat-value">{{ global_stats.negative_labels }}</span>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">Positive Ratio:</span>
+            <span class="stat-value">{{ "%.2f"|format(global_stats.positive_ratio * 100) }}%</span>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<style>
+.stats-container {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.stats-card {
+    background: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    flex: 1;
+    min-width: 300px;
+}
+
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.stat-label {
+    font-weight: bold;
+}
+
+.stat-value {
+    color: #52796f;
+}
+
+.login-prompt {
+    background-color: #f8f9fa;
+    border-left: 4px solid #52796f;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+}
+
+.login-prompt a {
+    color: #52796f;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.login-prompt a:hover {
+    text-decoration: underline;
+}
+</style>
+{% endblock %}

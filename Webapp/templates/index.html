@@ -1,0 +1,343 @@
+{% extends "layout.html" %}
+{% block title %}Internet Slang Discovery Platform{% endblock %}
+
+{% block head %}
+<style>
+    /* 首页特定样式 */
+    .hero {
+        background: linear-gradient(120deg, var(--primary) 0%, var(--secondary) 100%);
+        color: white;
+        padding: 3rem 0;
+        text-align: center;
+        border-radius: 0 0 10px 10px;
+        margin-bottom: 2rem;
+    }
+    
+    .hero-content {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    
+    .hero h1 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .hero p {
+        font-size: 1.2rem;
+        margin-bottom: 2rem;
+        opacity: 0.9;
+    }
+    
+    /* Features Section */
+    .features {
+        padding: 2rem 0;
+    }
+    
+    .section-title {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    
+    .section-title h2 {
+        font-size: 2rem;
+        color: var(--primary);
+        margin-bottom: 1rem;
+    }
+    
+    .section-title p {
+        color: #666;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+    }
+    
+    .feature-card {
+        background: white;
+        border-radius: 8px;
+        padding: 2rem;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        transition: transform 0.3s;
+        text-align: center;
+    }
+    
+    .feature-card:hover {
+        transform: translateY(-5px);
+    }
+    
+    .feature-icon {
+        font-size: 2.5rem;
+        color: var(--secondary);
+        margin-bottom: 1rem;
+    }
+    
+    .feature-card h3 {
+        color: var(--primary);
+        margin-bottom: 1rem;
+    }
+    
+    /* Stats Section */
+    .stats {
+        background: #f8f9fa;
+        padding: 3rem 0;
+        margin: 2rem 0;
+    }
+    
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 2rem;
+    }
+    
+    .stat-item {
+        text-align: center;
+    }
+    
+    .stat-number {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--secondary);
+        margin-bottom: 0.5rem;
+    }
+    
+    .stat-label {
+        color: #666;
+    }
+    
+    /* Recent Activity */
+    .activity {
+        margin: 2rem 0;
+    }
+    
+    .activity-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+    }
+    
+    .activity-card {
+        background: white;
+        border-radius: 8px;
+        padding: 1.5rem;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+    
+    .activity-card h3 {
+        color: var(--primary);
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #eee;
+    }
+    
+    .activity-item {
+        display: flex;
+        align-items: center;
+        padding: 0.8rem 0;
+        border-bottom: 1px solid #f5f5f5;
+    }
+    
+    .activity-item:last-child {
+        border-bottom: none;
+    }
+    
+    .activity-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: var(--light);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1rem;
+        color: var(--secondary);
+    }
+    
+    .activity-content {
+        flex: 1;
+    }
+    
+    .activity-content p {
+        margin-bottom: 0.2rem;
+    }
+    
+    .activity-time {
+        font-size: 0.8rem;
+        color: #888;
+    }
+    
+    /* CTA Section */
+    .cta {
+        background: var(--light);
+        padding: 3rem 0;
+        text-align: center;
+        border-radius: 10px;
+        margin: 2rem 0;
+    }
+    
+    .cta h2 {
+        color: var(--primary);
+        margin-bottom: 1rem;
+    }
+    
+    .cta p {
+        max-width: 600px;
+        margin: 0 auto 2rem;
+    }
+    
+    /* Footer */
+    .footer-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .footer-links {
+        display: flex;
+        gap: 1.5rem;
+    }
+    
+    .footer-links a {
+        color: white;
+        text-decoration: none;
+    }
+    
+    .footer-links a:hover {
+        color: var(--accent);
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .hero h1 {
+            font-size: 2rem;
+        }
+        
+        .hero p {
+            font-size: 1rem;
+        }
+        
+        .features-grid, .activity-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .footer-content {
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .footer-links {
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-content">
+        <h1>Label Emerging Internet Slang</h1>
+        <p>Join our platform to identify and categorize new slang terms from Bilibili, helping AI models better understand evolving digital language.</p>
+        {% if session.get('user_id') %}
+        <a href="/labeling" class="btn btn-primary"><strong>Start Labeling</strong></a>
+        {% else %}
+        <a href="/register" class="btn btn-primary"><strong>Get Started</strong></a>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features" id="features">
+    <div class="section-title">
+        <h2>How It Works</h2>
+        <p>Our platform combines machine learning with human intelligence to identify and validate new internet slang</p>
+    </div>
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">🔍</div>
+            <h3>Automated Discovery</h3>
+            <p>Our XGBoost algorithm scans comments to identify potential new slang terms based on linguistic patterns.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🏷️</div>
+            <h3>Collaborative Labeling</h3>
+            <p>Community members vote on candidate words, creating a crowdsourced validation system that improves accuracy.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">📊</div>
+            <h3>Data Insights</h3>
+            <p>Track your contributions and see how the community is helping advance natural language understanding.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="stats" id="stats">
+    <div class="section-title">
+        <h2>Project Impact</h2>
+        <p>Our community has made significant contributions to understanding internet language</p>
+    </div>
+    <div class="stats-grid">
+        <div class="stat-item">
+            <div class="stat-number" id="candidate-words">0</div>
+            <div class="stat-label">Candidate Words</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number" id="labels-applied">0</div>
+            <div class="stat-label">Labels Applied</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number" id="active-contributors">0</div>
+            <div class="stat-label">Active Contributors</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number" id="validated-terms">0</div>
+            <div class="stat-label">Validated Terms</div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // 平滑滚动到锚点
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            
+            const targetId = this.getAttribute('href');
+            if (targetId === '#') return;
+            
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+                targetElement.scrollIntoView({
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+    // 加载统计数据
+    function loadStats() {
+        fetch('/stats/overview')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('candidate-words').textContent = data.candidate_words.toLocaleString();
+                document.getElementById('labels-applied').textContent = data.labels_applied.toLocaleString();
+                document.getElementById('active-contributors').textContent = data.active_contributors.toLocaleString();
+                document.getElementById('validated-terms').textContent = data.validated_terms.toLocaleString();
+            })
+            .catch(error => {
+                console.error('Error loading stats:', error);
+            });
+    }
+    
+    // 页面加载完成后获取统计数据
+    document.addEventListener('DOMContentLoaded', loadStats);
+</script>
+{% endblock %}

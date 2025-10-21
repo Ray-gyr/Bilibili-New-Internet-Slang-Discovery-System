@@ -1,0 +1,295 @@
+{% extends "layout.html" %}
+{% block title %}Settings{% endblock %}
+{% block content %}
+<h1>User Settings</h1>
+
+{% if not session.user_id %}
+<div class="login-prompt" style="text-align: left;">
+    <p>Please <a href="{{ url_for('login_page', next=request.path) }}">log in</a> to view and change your settings.</p>
+</div>
+{% else %}
+
+<div class="settings-container">
+    <div class="settings-card">
+        <h3>Account Information</h3>
+        <div class="setting-item">
+            <span class="setting-label">Username:</span>
+            <span class="setting-value">{{ session.username }}</span>
+        </div>
+        <div class="setting-item">
+            <span class="setting-label">User ID:</span>
+            <span class="setting-value">{{ session.user_id }}</span>
+        </div>
+    </div>
+
+    <div class="settings-card">
+        <h3>Actions</h3>
+        <button onclick="showChangePasswordModal()" class="btn btn-primary">Change Password</button>
+        <button onclick="logout()" class="btn btn-secondary">Logout</button>
+    </div>
+</div>
+
+<!-- 密码修改弹窗 -->
+<div id="passwordModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h2>Change Password</h2>
+        <form id="passwordForm">
+            <div class="form-group">
+                <label for="currentPassword">Current Password:</label>
+                <input type="password" id="currentPassword" name="currentPassword" required>
+            </div>
+            <div class="form-group">
+                <label for="newPassword">New Password:</label>
+                <input type="password" id="newPassword" name="newPassword" required>
+            </div>
+            <div class="form-group">
+                <label for="confirmPassword">Confirm New Password:</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required>
+            </div>
+            <div class="form-actions">
+                <button type="button" onclick="closeModal()" class="btn btn-secondary">Cancel</button>
+                <button type="submit" class="btn btn-primary">Change Password</button>
+            </div>
+            <div id="passwordMessage" class="message"></div>
+        </form>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<style>
+.settings-container {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.settings-card {
+    background: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    flex: 1;
+    min-width: 300px;
+}
+
+.setting-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.setting-label {
+    font-weight: bold;
+}
+
+.setting-value {
+    color: #52796f;
+}
+
+.btn {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.btn-primary {
+    background: #52796f;
+    color: white;
+}
+
+.btn-secondary {
+    background: #6c757d;
+    color: white;
+}
+
+/* 弹窗样式 */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 10% auto;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+    max-width: 80%;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: black;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.message {
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 4px;
+    display: none;
+}
+
+.message.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.login-prompt {
+    background-color: #f8f9fa;
+    border-left: 4px solid #52796f;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.login-prompt a {
+    color: #52796f;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.login-prompt a:hover {
+    text-decoration: underline;
+}
+</style>
+
+{% if session.user_id %}
+<script>
+// 显示密码修改弹窗
+function showChangePasswordModal() {
+    document.getElementById('passwordModal').style.display = 'block';
+    document.getElementById('passwordForm').reset();
+    hideMessage();
+}
+
+// 关闭弹窗
+function closeModal() {
+    document.getElementById('passwordModal').style.display = 'none';
+}
+
+// 隐藏消息
+function hideMessage() {
+    const message = document.getElementById('passwordMessage');
+    message.style.display = 'none';
+    message.className = 'message';
+}
+
+// 显示消息
+function showMessage(text, isSuccess) {
+    const message = document.getElementById('passwordMessage');
+    message.textContent = text;
+    message.className = isSuccess ? 'message success' : 'message error';
+    message.style.display = 'block';
+}
+
+// 处理密码表单提交
+document.getElementById('passwordForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const currentPassword = document.getElementById('currentPassword').value;
+    const newPassword = document.getElementById('newPassword').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+    
+    // 验证新密码和确认密码是否匹配
+    if (newPassword !== confirmPassword) {
+        showMessage("New passwords don't match", false);
+        return;
+    }
+    
+    // 发送请求到服务器
+    fetch('/change_password', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            currentPassword: currentPassword,
+            newPassword: newPassword
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showMessage(data.message, true);
+            // 3秒后关闭弹窗
+            setTimeout(() => {
+                closeModal();
+            }, 3000);
+        } else {
+            showMessage(data.message, false);
+        }
+    })
+    .catch(error => {
+        showMessage("An error occurred. Please try again.", false);
+        console.error('Error:', error);
+    });
+});
+
+function logout() {
+    window.location.href = "/logout";
+}
+
+// 点击弹窗外部关闭弹窗
+window.onclick = function(event) {
+    const modal = document.getElementById('passwordModal');
+    if (event.target == modal) {
+        closeModal();
+    }
+}
+</script>
+{% endif %}
+{% endblock %}
