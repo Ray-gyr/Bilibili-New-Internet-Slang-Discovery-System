@@ -6,6 +6,11 @@ A comprehensive system for collecting, analyzing, and discovering new words from
 ## 🎥 Demo Video
 [Demo video](https://youtu.be/qf0JD5w09e8)
 
+Introduction           0:00-0:14
+
+Crawler and Pipeline   0.15-3:32
+
+Web Platform           3:33-6:52
 
 ## ⚙️ Environment Setup
 
