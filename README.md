@@ -4,7 +4,7 @@ A comprehensive system for collecting, analyzing, and discovering new words from
 
 
 ## 🎥 Demo Video
-*Demo video not yet uploaded — coming soon*
+[Demo video](https://youtu.be/qf0JD5w09e8)
 
 
 ## ⚙️ Environment Setup
