@@ -8,7 +8,7 @@ A comprehensive system for collecting, analyzing, and discovering new words from
 
 Introduction           0:00-0:14
 
-Crawler and Pipeline   0.15-3:32
+Crawler and Pipeline   0:15-3:32
 
 Web Platform           3:33-6:52
 
